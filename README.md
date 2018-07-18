@@ -10,7 +10,7 @@ RCE in old Jenkins (CVE-2015-xxx, Jenkins 1.600 and older)
 Use ysoserial to generate a payload:
 https://github.com/frohoff/ysoserial
 
-Then RCE using this script (I'll upload my modified version):
+Then RCE using this script or the one joined (pwn_jenkins.py):
 https://github.com/foxglovesec/JavaUnserializeExploits/blob/master/jenkins.py
 
 ```bash
