@@ -4,7 +4,7 @@ pwn_jenkins
 Notes about Jenkins exploitation and post-exploitation.
 
 
-RCE in old Jenkins (CVE-2015-xxx, Jenkins 1.600 and older)
+RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 ==========================================================
 
 Use ysoserial to generate a payload:
