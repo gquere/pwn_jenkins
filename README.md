@@ -10,7 +10,7 @@ RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 Use ysoserial to generate a payload:
 https://github.com/frohoff/ysoserial
 
-Then RCE using this script or the one joined (./rce/pwn_jenkins.py):
+Then RCE using this script (or the one joined)[./rce/pwn_jenkins.py]:
 https://github.com/foxglovesec/JavaUnserializeExploits/blob/master/jenkins.py
 
 ```bash
@@ -30,11 +30,18 @@ These files are needed to decrypt Jenkins secrets:
 Such secrets can usually be found in:
 
 * credentials.xml
+* jobs/.../build.xml
+
+Here's a regexp to find them:
+```bash
+grep -re "^\s*<[a-zA-Z]*>{[a-zA-Z0-9=+/]*}<"
+```
+
 
 Decrypt Jenkins secrets offline
 ===============================
 
-See ./offline_decryption/jenkins_offline_decrypt.py
+See (this script)[./offline_decryption/jenkins_offline_decrypt.py].
 
 
 Decrypt Jenkins secrets from Groovy
