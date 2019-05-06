@@ -8,7 +8,7 @@ from Crypto.Cipher import AES
 
 
 # configure this to your liking
-secret_title_list = [ 'apiToken', 'password', 'privateKey', 'passphrase' ]
+secret_title_list = [ 'apiToken', 'password', 'privateKey', 'passphrase', 'secret', 'secretId', 'value', 'defaultValue', 'apiToken']
 
 decryption_magic = b'::::MAGIC::::'
 
@@ -19,6 +19,8 @@ def usage():
     print('\t' + sys.argv[0] + ' jenkins_base_path')
     print('or:')
     print('\t' + sys.argv[0] + ' master.key hudson.util.Secret <credentials.xml>')
+    print('or:')
+    print('-i path (interactive mode)')
     sys.exit(1)
 
 
@@ -77,6 +79,9 @@ def decrypt_secret_new_format(encrypted_secret, confidentiality_key):
 
 
 def decrypt_secret(encoded_secret, confidentiality_key):
+    if encoded_secret is None:
+        return None
+
     try:
         encrypted_secret = base64.b64decode(encoded_secret)
     except base64.binascii.Error as error:
@@ -84,6 +89,7 @@ def decrypt_secret(encoded_secret, confidentiality_key):
         print('If your input was quite large and exceeded the terminal\'s ' +
               '4096 char input limit then you might want to increase it using' +
               ' stty -icanon')
+        print(encoded_secret)
         return None
 
     if encrypted_secret[0] == 1:
@@ -118,8 +124,12 @@ def run_interactive_mode(confidentiality_key):
         if not secret:
            continue
         else:
-            decrypted_secret = decrypt_secret(secret, confidentiality_key)
-            print(decrypted_secret.decode('utf-8'))
+            try:
+                decrypted_secret = decrypt_secret(secret, confidentiality_key)
+                print(decrypted_secret.decode('utf-8'))
+            except Exception as e:
+                print(e)
+                print(decrypted_secret)
 
 
 # MAIN #########################################################################
@@ -129,6 +139,18 @@ credentials_file = ''
 if len(sys.argv) > 4 or len(sys.argv) < 2:
     usage()
     exit(1)
+
+if sys.argv[1] == '-i':
+    base_path = sys.argv[2]
+    if not os.path.isdir(base_path):
+        usage()
+        exit(1)
+    master_key_file = base_path + '/secrets/master.key'
+    hudson_secret_file = base_path + '/secrets/hudson.util.Secret'
+    if (not os.path.exists(master_key_file) or
+        not os.path.exists(hudson_secret_file)):
+        print('Failed finding required files where I expected them')
+        exit(1)
 elif len(sys.argv) == 2:
     base_path = sys.argv[1]
     if not os.path.isdir(base_path):
