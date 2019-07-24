@@ -18,9 +18,9 @@ def downgrade_ssl():
 
 
 # CONSTANTS ####################################################################
-OUTPUT_DIR = './output'
+OUTPUT_DIR = './output/'
 RECOVER_LAST_BUILD_ONLY = True
-DEBUG = False
+DEBUG = True
 
 
 # UTILS ########################################################################
@@ -50,7 +50,7 @@ def dump_to_disk(url, consoleText, envVars):
 
 # DUMPERS ######################################################################
 def dump_jobs(url):
-    r = requests.get(url + '/api/json/' + '?tree=jobs[name]', verify=False, auth=AUTH)
+    r = requests.get(url + '/api/json/', verify=False, auth=AUTH)
     if 'Authentication required' in r.text:
         print('[ERROR] This Jenkins needs authentication')
         exit(1)
@@ -66,13 +66,6 @@ def dump_jobs(url):
     parse_job(response, url)
 
 
-def dump_builds(url):
-    r = requests.get(url + '/api/json/' + '?tree=builds[number]', verify=False, auth=AUTH)
-    response = json.loads(r.text)
-    print_debug(response)
-    parse_builds(response, url)
-
-
 def dump_build(url):
     r = requests.get(url + '/consoleText', verify=False, auth=AUTH)
     consoleText = r.text
@@ -84,40 +77,17 @@ def dump_build(url):
 
 # PARSERS ######################################################################
 def parse_job(response, url):
-    for job in response['jobs']:
-        print_debug(job)
-        if job['_class'] == 'com.cloudbees.hudson.plugins.folder.Folder':
-            print("[+] Found folder {}".format(job['name']))
-            dump_jobs(url + '/job/' + job['name'] + '/' )
-        elif job['_class'] == 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject':
-            print("[+] Found branch {}".format(job['name']))
-            dump_jobs(url + '/job/' + job['name'] + '/' )
-        elif job['_class'] == 'hudson.model.FreeStyleProject':
-            print("[+] Found job {}".format(job['name']))
-            dump_builds(url + '/job/' + job['name'] + '/')
-        elif job['_class'] == 'org.jenkinsci.plugins.workflow.job.WorkflowJob':
-            print("[+] Found job {}".format(job['name']))
-            dump_builds(url + '/job/' + job['name'] + '/')
-        elif job['_class'] == 'hudson.maven.MavenModuleSet':
-            print("[+] Found job {}".format(job['name']))
-            dump_builds(url + '/job/' + job['name'] + '/')
-        elif job['_class'] == 'com.tikal.jenkins.plugins.multijob.MultiJobProject':
-            print("[+] Found job {}".format(job['name']))
-            dump_builds(url + '/job/' + job['name'] + '/')
-        else:
-            print("[ERROR] Unknown type {}".format(job['_class']))
+    if 'jobs' in response:
+        for job in response['jobs']:
+            print('[+] Found job {}'.format(job))
+            dump_jobs(job['url'])
 
-
-def parse_builds(response, url):
-    if len(response['builds']) == 0:
-        return
-
-    for i in range(len(response['builds'])):
-        build_number = response['builds'][i]['number']
-        print("[+] Found build number {}".format(build_number))
-        dump_build(url + str(build_number) + '/')
-        if RECOVER_LAST_BUILD_ONLY == True:
-            break
+    if 'builds' in response:
+        print('[+] Found {} builds'.format(len(builds)))
+        for build in response['builds']:
+            dump_build(build['url'])
+            if RECOVER_LAST_BUILD_ONLY == True:
+                break
 
 
 # MAIN #########################################################################
