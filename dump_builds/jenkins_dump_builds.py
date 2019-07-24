@@ -4,6 +4,7 @@ import json
 import urllib3
 import os
 import argparse
+import concurrent.futures
 
 
 # SUPPRESS WARNINGS ############################################################
@@ -19,9 +20,10 @@ def downgrade_ssl():
 
 # CONSTANTS ####################################################################
 OUTPUT_DIR = './output/'
-RECOVER_LAST_BUILD_ONLY = True
+RECOVER_LAST_BUILD_ONLY = False
 RECOVER_FROM_FAILURE = False
 DEBUG = False
+BUILD_LIST = []
 
 
 # UTILS ########################################################################
@@ -56,7 +58,7 @@ def job_was_dumped(url):
 
 # DUMPERS ######################################################################
 def dump_jobs(url):
-    r = requests.get(url + '/api/json/', verify=False, auth=AUTH, timeout=20)
+    r = SESSION.get(url + '/api/json/', verify=False, auth=AUTH, timeout=20)
     if 'Authentication required' in r.text:
         print('[ERROR] This Jenkins needs authentication')
         exit(1)
@@ -69,38 +71,31 @@ def dump_jobs(url):
 
     response = json.loads(r.text)
     print_debug(response)
-    parse_job(response, url)
+
+    if 'jobs' in response:
+        for job in response['jobs']:
+            if RECOVER_FROM_FAILURE and job_was_dumped(job['url']):
+                continue
+            try:
+                dump_jobs(job['url'], nest + 1)
+            except requests.exceptions.ReadTimeout:
+                print('[ERROR] Gave up on job {} because of a timeout (server is probably busy)'.format(job['name']))
+
+    if 'builds' in response:
+        for build in response['builds']:
+            BUILD_LIST.append(build['url'])
+            if RECOVER_LAST_BUILD_ONLY == True:
+                break
 
 
 def dump_build(url):
-    r = requests.get(url + '/consoleText', verify=False, auth=AUTH)
+    r = SESSION.get(url + '/consoleText', verify=False, auth=AUTH, timeout=20)
     consoleText = r.text
-    r = requests.get(url + '/injectedEnvVars/api/json', verify=False, auth=AUTH)
+    r = SESSION.get(url + '/injectedEnvVars/api/json', verify=False, auth=AUTH, timeout=20)
     envVars = r.text
 
     dump_to_disk(url, consoleText, envVars)
 
-
-# PARSERS ######################################################################
-def parse_job(response, url):
-    if 'jobs' in response:
-        for job in response['jobs']:
-            print('[+] Found job {}'.format(job['name']))
-            if RECOVER_FROM_FAILURE and job_was_dumped(job['url']):
-                print('[-] Skipping job because of the configuration')
-                continue
-            try:
-                dump_jobs(job['url'])
-            except requests.exceptions.ReadTimeout:
-                print('[ERROR] Gave up on job because of a timeout (server is probably busy)')
-
-    if 'builds' in response:
-        print('[+] Found {} builds'.format(len(response['builds'])))
-        for build in response['builds']:
-            dump_build(build['url'])
-            if RECOVER_LAST_BUILD_ONLY == True:
-                print('[-] Only recovering last build because of the configuration, use -f for a full dump')
-                break
 
 
 # MAIN #########################################################################
@@ -110,7 +105,7 @@ parser.add_argument('-u', '--user', type=str)
 parser.add_argument('-p', '--password', type=str)
 parser.add_argument('-o', '--output-dir', type=str)
 parser.add_argument('-d', '--downgrade_ssl', action='store_true', help='Downgrade SSL to use RSA')
-parser.add_argument('-f', '--full', action='store_true', help='Dump all available builds')
+parser.add_argument('-l', '--last', action='store_true', help='Dump only the last build of each job')
 parser.add_argument('-r', '--recover_from_failure', action='store_true', help='Recover from server failure, skip all existing directories')
 
 args = parser.parse_args()
@@ -123,9 +118,16 @@ if args.output_dir:
     OUTPUT_DIR = args.output_dir + '/'
 if args.downgrade_ssl:
     downgrade_ssl()
-if args.full:
-    RECOVER_LAST_BUILD_ONLY = False
+if args.last:
+    RECOVER_LAST_BUILD_ONLY = True
 if args.recover_from_failure:
     RECOVER_FROM_FAILURE = True
 
+SESSION = requests.session()
+
+print('[+] Getting a list of jobs and builds')
 dump_jobs(BASE_URL)
+
+print('[+] Dumping gathered builds')
+with concurrent.futures.ThreadPoolExecutor(max_workers=128) as executor:
+    executor.map(dump_build, BUILD_LIST)
