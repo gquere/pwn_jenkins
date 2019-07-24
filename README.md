@@ -23,19 +23,25 @@ Dumping builds to find cleartext secrets
 Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console outputs and build environment variables to hopefully find cleartext secrets.
 
 ```
-usage: jenkins_dump_builds.py [-h] -U URL [-u USER] [-p PASSWORD]
-                              [-o OUTPUT_DIR] [-d] [-f]
+usage: jenkins_dump_builds.py [-h] [-u USER] [-p PASSWORD] [-o OUTPUT_DIR]
+                              [-d] [-f] [-r]
+                              url [url ...]
 
 Dump all available info from Jenkins
 
+positional arguments:
+  url
+
 optional arguments:
   -h, --help            show this help message and exit
-  -U URL, --url URL
   -u USER, --user USER
   -p PASSWORD, --password PASSWORD
   -o OUTPUT_DIR, --output-dir OUTPUT_DIR
   -d, --downgrade_ssl   Downgrade SSL to use RSA
   -f, --full            Dump all available builds
+  -r, --recover_from_failure
+                        Recover from server failure, skip all existing
+                        directories
 ```
 
 Files to copy after compromission
