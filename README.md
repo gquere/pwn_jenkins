@@ -1,5 +1,5 @@
-pwn_jenkins
-===========
+Jenkins Pentesting Notes
+========================
 
 Notes about Jenkins exploitation and post-exploitation.
 
