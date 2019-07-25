@@ -77,7 +77,7 @@ def dump_jobs(url):
             if RECOVER_FROM_FAILURE and job_was_dumped(job['url']):
                 continue
             try:
-                dump_jobs(job['url'], nest + 1)
+                dump_jobs(job['url'])
             except requests.exceptions.ReadTimeout:
                 print('[ERROR] Gave up on job {} because of a timeout (server is probably busy)'.format(job['name']))
 
