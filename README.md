@@ -7,9 +7,7 @@ Notes about Jenkins exploitation and post-exploitation.
 RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 ==========================================================
 
-Use ysoserial to generate a payload:
-https://github.com/frohoff/ysoserial
-
+Use [ysoserial](https://github.com/frohoff/ysoserial) to generate a payload.
 Then RCE using [this script](./rce/pwn_jenkins.py):
 
 ```bash
