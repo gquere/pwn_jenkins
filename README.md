@@ -99,7 +99,7 @@ Usage:
 or:
 	jenkins_offline_decrypt.py <master.key> <hudson.util.Secret> [credentials.xml]
 or:
-    jenkins_offline_decrypt.py -i <path> (interactive mode)
+	jenkins_offline_decrypt.py -i <path> (interactive mode)
 ```
 
 
