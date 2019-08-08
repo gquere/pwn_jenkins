@@ -1,8 +1,3 @@
-Jenkins Pentesting Notes
-========================
-
-Notes about Jenkins exploitation and post-exploitation.
-
 <img src="/pwn_jenkins.png" width="640">
 
 Remote Code Execution
