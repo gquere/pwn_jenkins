@@ -15,12 +15,13 @@ decryption_magic = b'::::MAGIC::::'
 
 # USAGE ########################################################################
 def usage():
+    name = '\t' + os.path.basename(sys.argv[0])
     print('Usage:')
-    print('\t' + sys.argv[0] + ' jenkins_base_path')
+    print(name + ' <jenkins_base_path>')
     print('or:')
-    print('\t' + sys.argv[0] + ' master.key hudson.util.Secret <credentials.xml>')
+    print(name + ' <master.key> <hudson.util.Secret> [credentials.xml]')
     print('or:')
-    print('-i path (interactive mode)')
+    print(name + ' -i <path> (interactive mode)')
     sys.exit(1)
 
 
