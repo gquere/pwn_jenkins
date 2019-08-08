@@ -17,7 +17,7 @@ Metaprogramming RCE in Jenkins Plugins (CVE-2019-100300{0,1,2})
 ---------------------------------------------------------------
 [Jenkins Advisory](https://jenkins.io/security/advisory/2019-01-08)
 
-Original pre-auth RCE vulnerability [here](https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html).
+Original pre-auth RCE vulnerability details [here](https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html), full exploit [here](https://github.com/petercunha/jenkins-rce).
 
 Alternative RCE with Overall/Read and Job/Configure permissions [here](https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc).
 
