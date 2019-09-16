@@ -79,6 +79,12 @@ optional arguments:
                         directories
 ```
 
+Password spraying
+=================
+
+Use [this python script](./password_spraying/jenkins_password_spraying.py) or [this powershell script](https://github.com/chryzsh/JenkinsPasswordSpray).
+
+
 Files to copy after compromission
 =================================
 
