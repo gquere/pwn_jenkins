@@ -32,12 +32,23 @@ def get_confidentiality_key(master_key_path, hudson_secret_path):
     with open(master_key_path, 'r') as f:
         master_key = f.read().encode('utf-8')
 
-    # the master key is hashed and truncated to 16 bytes due to US restrictions
-    derived_master_key = sha256(master_key).digest()[:16]
-
-    # the hudson secret is encrypted using the derived master key
+    # the hudson secret is bytes encrypted using a key derived from the master key
     with open(hudson_secret_path, 'rb') as f:
         hudson_secret = f.read()
+
+    # sanitize keys if copy or base64 introduced a newline
+    if len(master_key)%2 != 0 and master_key[-1:] == b'\n':
+        master_key = master_key[:-1]
+    if len(hudson_secret)%2 != 0 and hudson_secret[-1:] == b'\n':
+        hudson_secret = hudson_secret[:-1]
+
+    return decrypt_confidentiality_key(master_key, hudson_secret)
+
+
+def decrypt_confidentiality_key(master_key, hudson_secret):
+
+    # the master key is hashed and truncated to 16 bytes due to US restrictions
+    derived_master_key = sha256(master_key).digest()[:16]
 
     # the hudson key is decrypted using this derived key
     cipher_handler = AES.new(derived_master_key, AES.MODE_ECB)
