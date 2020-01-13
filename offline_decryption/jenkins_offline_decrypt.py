@@ -116,9 +116,14 @@ def decrypt_credentials_file(credentials_file, confidentiality_key):
     with open(credentials_file, 'r') as f:
         data = f.read()
 
+    # old password storage format just contains a b64 value whereas new format
+    # dictates the secret should be inside curly braces, so find all we can and
+    # then remove duplicates
     secrets = []
     for secret_title in secret_title_list:
         secrets += re.findall(secret_title + '>\{?(.*?)\}?</' + secret_title, data)
+    secrets += re.findall('>{([a-zA-Z0-9=+/]*)}</', data)
+    secrets = list(set(secrets))
 
     for secret in secrets:
         try:
