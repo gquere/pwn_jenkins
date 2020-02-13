@@ -66,7 +66,7 @@ Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console ou
 
 ```
 usage: jenkins_dump_builds.py [-h] [-u USER] [-p PASSWORD] [-o OUTPUT_DIR]
-                              [-d] [-l] [-r]
+                              [-l] [-r] [-d] [-s] [-v]
                               url [url ...]
 
 Dump all available info from Jenkins
@@ -79,11 +79,14 @@ optional arguments:
   -u USER, --user USER
   -p PASSWORD, --password PASSWORD
   -o OUTPUT_DIR, --output-dir OUTPUT_DIR
-  -d, --downgrade_ssl   Downgrade SSL to use RSA
   -l, --last            Dump only the last build of each job
   -r, --recover_from_failure
                         Recover from server failure, skip all existing
                         directories
+  -d, --downgrade_ssl   Downgrade SSL to use RSA (for legacy)
+  -s, --no_use_session  Don't reuse the HTTP session, but create a new one for
+                        each request (for legacy)
+  -v, --verbose         Debug mode
 ```
 
 Password spraying
