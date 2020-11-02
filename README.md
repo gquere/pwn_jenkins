@@ -25,8 +25,8 @@ curl -k -4 -s https://example.com/securityRealm/user/admin/search/index?q=a
 ```
 
 
-Metaprogramming RCE in Jenkins Plugins (CVE-2019-100300{0,1,2})
----------------------------------------------------------------
+Metaprogramming RCE in Jenkins Plugins (CVE-2019-1003000, CVE-2019-1003001, CVE-2019-1003002)
+---------------------------------------------------------------------------------------------
 [Jenkins Advisory](https://jenkins.io/security/advisory/2019-01-08)
 
 Original RCE vulnerability [here](https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html), full exploit [here](https://github.com/petercunha/jenkins-rce).
@@ -34,8 +34,8 @@ Original RCE vulnerability [here](https://blog.orange.tw/2019/02/abusing-meta-pr
 Alternative RCE with Overall/Read and Job/Configure permissions [here](https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc).
 
 
-CheckScript RCE in Jenkins (CVE-2019-10030{29,30})
---------------------------------------------------
+CheckScript RCE in Jenkins (CVE-2019-1003029, CVE-2019-1003030)
+---------------------------------------------------------------
 [Jenkins Advisory](https://jenkins.io/security/advisory/2019-03-06/), [Credits](https://twitter.com/webpentest).
 
 Check if a Jenkins instance is vulnerable (needs Overall/Read permissions) with some Groovy:
@@ -54,7 +54,7 @@ curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.s
 ```
 
 Git plugin (<3.12.0) RCE in Jenkins (CVE-2019-10392)
----------------------------------------------------
+----------------------------------------------------
 [Jenkins Advisory](https://jenkins.io/security/advisory/2019-09-12/), [Credits](https://iwantmore.pizza/posts/cve-2019-10392.html).
 
 This one will only work is a user has the 'Jobs/Configure' rights in the security matrix so it's very specific.
