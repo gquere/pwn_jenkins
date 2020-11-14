@@ -11,7 +11,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # UTILS ########################################################################
 def try_login(auth):
-    r = SESSION.post(URL + '/j_acegi_security_check', data=auth, verify=False)
+    r = SESSION.post(URL + '/j_spring_security_check', data=auth, verify=False)
 
     if r.status_code == 200:
         return True
