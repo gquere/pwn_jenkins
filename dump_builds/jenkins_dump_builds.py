@@ -25,6 +25,7 @@ RECOVER_LAST_BUILD_ONLY = False
 RECOVER_FROM_FAILURE = False
 DEBUG = False
 BUILD_LIST = []
+FORCE_SSL = False
 
 
 # UTILS ########################################################################
@@ -65,7 +66,10 @@ def job_was_dumped(url):
 def sanitize_url(url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(BASE_URL)
-    sanitized = parsed_url._replace(netloc=parsed_original_url.netloc)
+    if FORCE_SSL:
+        sanitized = parsed_url._replace(netloc=parsed_original_url.netloc, scheme='https')
+    else:
+        sanitized = parsed_url._replace(netloc=parsed_original_url.netloc)
     return sanitized.geturl()
 
 
@@ -94,7 +98,9 @@ def dump_jobs(url):
     try:
         response = json.loads(r.text)
     except:
-        print('[ERROR] Failed parsing server response for {}'.format(url + '/api/json/'))
+        print('[ERROR] Failed parsing server response for {}, try -f maybe or -v for debug'.format(url + '/api/json/'))
+        if DEBUG:
+            print(r.text)
         return
 
     if 'jobs' in response:
@@ -134,6 +140,7 @@ parser.add_argument('-o', '--output-dir', type=str)
 parser.add_argument('-l', '--last', action='store_true', help='Dump only the last build of each job')
 parser.add_argument('-r', '--recover_from_failure', action='store_true', help='Recover from server failure, skip all existing directories')
 parser.add_argument('-d', '--downgrade_ssl', action='store_true', help='Downgrade SSL to use RSA (for legacy)')
+parser.add_argument('-f', '--force-ssl', action='store_true', help='Force usage of SSL if API returns wrong HTTP-only links')
 parser.add_argument('-s', '--no_use_session', action='store_true', help='Don\'t reuse the HTTP session, but create a new one for each request (for legacy)')
 parser.add_argument('-v', '--verbose', action='store_true', help='Debug mode')
 
@@ -146,6 +153,8 @@ if args.output_dir:
     OUTPUT_DIR = args.output_dir + '/'
 if args.downgrade_ssl:
     downgrade_ssl()
+if args.force_ssl:
+    FORCE_SSL = True
 if args.last:
     RECOVER_LAST_BUILD_ONLY = True
 if args.recover_from_failure:
