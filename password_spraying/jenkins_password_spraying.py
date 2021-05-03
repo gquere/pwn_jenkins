@@ -9,12 +9,23 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+# CONSTANTS ####################################################################
+LEGACY_AUTH = '/j_acegi_security_check'
+SPRING_AUTH = '/j_spring_security_check'
+AUTH = LEGACY_AUTH
+
+
 # UTILS ########################################################################
 def try_login(auth):
-    r = SESSION.post(URL + '/j_acegi_security_check', data=auth, verify=False)
+    r = SESSION.post(URL + 'AUTH', data=auth, verify=False)
 
     if r.status_code == 200:
         return True
+
+    if r.status_code == 404:
+        print('[+] Got 404 from /j_acegi_security_check, trying /j_spring_security_check')
+        AUTH = SPRING_AUTH
+        return try_login(auth)
 
     if r.status_code == 403 and 'X-You-Are-Authenticated-As' in r.headers:
         print('Warning: next user probably misses Global/Read permissions')
