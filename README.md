@@ -60,6 +60,13 @@ Git plugin (<3.12.0) RCE in Jenkins (CVE-2019-10392)
 This one will only work is a user has the 'Jobs/Configure' rights in the security matrix so it's very specific.
 
 
+CorePlague (CVE-2023-27898, CVE-2023-27905)
+-------------------------------------------
+[Jenkins Advisory](https://www.jenkins.io/security/advisory/2023-03-08/), [Credits](https://blog.aquasec.com/jenkins-server-vulnerabilities)
+
+Note that this is only exploitable if using a *dedicated* and out-of-date [Update Center](https://www.jenkins.io/templates/updates/). Therefore most servers are not vulnerable.
+
+
 Dumping builds to find cleartext secrets
 ========================================
 Use [this script](./dump_builds/jenkins_dump_builds.py) to dump build console outputs and build environment variables to hopefully find cleartext secrets.
