@@ -4,7 +4,7 @@ Remote Code Execution
 =====================
 Jenkins CLI arbitrary read (CVE-2024-23897 applies to versions below 2.442 and LTS 2.426.3)
 -------------------------------------------
-[Jenkins Advisory](https://www.jenkins.io/security/advisory/2024-01-24/)
+[Jenkins Advisory](https://www.jenkins.io/security/advisory/2024-01-24/), [Credits](https://www.sonarsource.com/blog/excessive-expansion-uncovering-critical-security-vulnerabilities-in-jenkins/)
 
 Authenticated, can retrieve a complete file:
 ```
