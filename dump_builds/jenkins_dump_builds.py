@@ -44,14 +44,14 @@ def dump_to_disk(url, consoleText, envVars):
 
     # first, need to create dirs
     parsed_url = urlparse(url)
-    folder = OUTPUT_DIR + '/' + parsed_url.path
+    folder = OUTPUT_DIR + parsed_url.path
     create_dir(folder)
 
     # then dump files
-    with open(folder + 'consoleText', 'w+') as f:
+    with open(folder + '/consoleText', 'w+') as f:
         f.write(consoleText)
 
-    with open(folder + 'envVars', 'w+') as f:
+    with open(folder + '/envVars', 'w+') as f:
         f.write(envVars)
 
 
